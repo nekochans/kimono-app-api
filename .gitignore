@@ -17,3 +17,6 @@
 # IDEA setteing
 /.idea/
 kimono-app-api.iml
+
+# output go build
+kimono-app-api
