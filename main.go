@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/nekochans/kimono-app-api/infrastructure/httputil"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -10,6 +12,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8888", nil)
+	router := http.NewServeMux()
+	router.HandleFunc("/", handler)
+	http.ListenAndServe(":8888", httputil.Log(router))
 }
