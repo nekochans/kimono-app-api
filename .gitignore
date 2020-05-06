@@ -20,3 +20,6 @@ kimono-app-api.iml
 
 # output go build
 kimono-app-api
+
+# air tmp directory
+tmp
