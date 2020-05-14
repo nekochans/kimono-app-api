@@ -1,18 +1,14 @@
 package main
 
-import (
-	"fmt"
-	"net/http"
+import "github.com/nekochans/kimono-app-api/infrastructure"
 
-	"github.com/nekochans/kimono-app-api/infrastructure/httputil"
-)
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, HTTPサーバ")
-}
+//func handler(w http.ResponseWriter, r *http.Request) {
+//	fmt.Fprint(w, "Hello, HTTPサーバ")
+//}
 
 func main() {
-	router := http.NewServeMux()
-	router.HandleFunc("/", handler)
-	http.ListenAndServe(":8888", httputil.Log(router))
+	infrastructure.StartHTTPServer()
+	//router := http.NewServeMux()
+	//router.HandleFunc("/", handler)
+	//http.ListenAndServe(":8888", httputil.Log(router))
 }
