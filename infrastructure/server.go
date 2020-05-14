@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/nekochans/kimono-app-api/infrastructure/httputil"
+
 	"github.com/go-chi/chi"
 	"go.uber.org/zap"
 )
@@ -20,6 +22,10 @@ func NewServer(logger *zap.Logger) *HTTPServer {
 		router: chi.NewRouter(),
 		logger: logger,
 	}
+}
+
+func (s *HTTPServer) Middleware() {
+	s.router.Use(httputil.Log(s.logger))
 }
 
 func (s *HTTPServer) Router() {
@@ -38,6 +44,7 @@ func StartHTTPServer() {
 		os.Exit(1)
 	}
 	s := NewServer(logger)
+	s.Middleware()
 	s.Router()
 	log.Println("Starting app")
 	_ = http.ListenAndServe(":8888", s.router)
