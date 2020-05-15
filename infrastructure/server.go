@@ -9,6 +9,7 @@ import (
 	"github.com/nekochans/kimono-app-api/infrastructure/httputil"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"go.uber.org/zap"
 )
 
@@ -25,6 +26,7 @@ func NewServer(logger *zap.Logger) *HTTPServer {
 }
 
 func (s *HTTPServer) Middleware() {
+	s.router.Use(middleware.RequestID)
 	s.router.Use(httputil.Log(s.logger))
 }
 
