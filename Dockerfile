@@ -12,7 +12,7 @@ ARG GOLANGCI_LINT_VERSION=v1.27.0
 
 RUN set -eux && \
   apk update && \
-  apk add --no-cache git curl && \
+  apk add --no-cache git curl make && \
   curl -fLo /go/bin/air https://git.io/linux_air && \
   chmod +x /go/bin/air && \
   go get -u github.com/go-delve/delve/cmd/dlv && \
