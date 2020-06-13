@@ -7,12 +7,10 @@
 
 ## ローカル実行
 
-docker-composeを利用して起動します。
+以下のスクリプトを実行して下さい。
 
-```bash
-docker-compose up --build -d
-```
+`./docker-compose-up.sh`
 
-デバッグ方法については下記の記事を参照してください。
+[この記事](https://qiita.com/keitakn/items/f46347f871083356149b) のように `delve` を使ってデバックを行う場合は以下のスクリプトを実行して下さい。
 
-[Docker上のGoLangをリモートデバッグする](https://qiita.com/keitakn/items/f46347f871083356149b)
+`./docker-compose-up-debug.sh`
