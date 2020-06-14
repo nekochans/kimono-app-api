@@ -1,4 +1,7 @@
 # kimono-app-api
+![ci-master](https://github.com/nekochans/kimono-app-api/workflows/ci-master/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/nekochans/kimono-app-api/badge.svg?branch=master)](https://coveralls.io/github/nekochans/kimono-app-api?branch=master)
+
 着物アプリのバックエンドAPI（仮）
 
 ## 開発環境
