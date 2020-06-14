@@ -39,7 +39,13 @@ func (s *HTTPServer) Router() {
 func StartHTTPServer() {
 	logOpts := LoggerOptions{}
 	logger, err := NewLoggerFromOptions(logOpts)
-	defer logger.Sync()
+
+	defer func() {
+		err := logger.Sync()
+		if err != nil {
+			log.Fatal(err, "logger.Sync() Fatal.")
+		}
+	}()
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "[ERROR] Failed to create logger: %s\n", err)

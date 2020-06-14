@@ -1,4 +1,7 @@
 # kimono-app-api
+![ci-master](https://github.com/nekochans/kimono-app-api/workflows/ci-master/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/nekochans/kimono-app-api/badge.svg?branch=master)](https://coveralls.io/github/nekochans/kimono-app-api?branch=master)
+
 着物アプリのバックエンドAPI（仮）
 
 ## 開発環境
@@ -7,12 +10,10 @@
 
 ## ローカル実行
 
-docker-composeを利用して起動します。
+以下のスクリプトを実行して下さい。
 
-```bash
-docker-compose up --build -d
-```
+`./docker-compose-up.sh`
 
-デバッグ方法については下記の記事を参照してください。
+[この記事](https://qiita.com/keitakn/items/f46347f871083356149b) のように `delve` を使ってデバックを行う場合は以下のスクリプトを実行して下さい。
 
-[Docker上のGoLangをリモートデバッグする](https://qiita.com/keitakn/items/f46347f871083356149b)
+`./docker-compose-up-debug.sh`

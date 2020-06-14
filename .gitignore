@@ -23,3 +23,9 @@ kimono-app-api
 
 # air tmp directory
 tmp
+
+# goenv go-version
+.go-version
+
+# Air(Live reload for Go apps) Setting Files
+.air.conf
