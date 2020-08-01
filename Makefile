@@ -1,4 +1,4 @@
-.PHONY: lint test test-ci
+.PHONY: lint format test test-ci
 
 lint:
 	@go vet ./...
