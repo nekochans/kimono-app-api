@@ -8,7 +8,7 @@ COPY . .
 
 ENV GO111MODULE=off
 
-ARG GOLANGCI_LINT_VERSION=v1.27.0
+ARG GOLANGCI_LINT_VERSION=v1.29.0
 
 RUN set -eux && \
   apk update && \
@@ -17,7 +17,8 @@ RUN set -eux && \
   chmod +x /go/bin/air && \
   go get -u github.com/go-delve/delve/cmd/dlv && \
   go build -o /go/bin/dlv github.com/go-delve/delve/cmd/dlv && \
-  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${GOLANGCI_LINT_VERSION}
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${GOLANGCI_LINT_VERSION} && \
+  go get golang.org/x/tools/cmd/goimports
 
 ENV GO111MODULE on
 
