@@ -31,7 +31,6 @@ func Log(l *zap.Logger) func(next http.Handler) http.Handler {
 			}()
 
 			next.ServeHTTP(ww, r)
-
 		}
 		return http.HandlerFunc(fn)
 	}

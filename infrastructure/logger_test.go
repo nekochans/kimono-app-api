@@ -1,8 +1,9 @@
 package infrastructure
 
 import (
-	"go.uber.org/zap/zapcore"
 	"testing"
+
+	"go.uber.org/zap/zapcore"
 )
 
 func TestCreateNewLoggerLogLevelIsDebug(t *testing.T) {

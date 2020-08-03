@@ -1,9 +1,11 @@
-.PHONY: lint test test-ci
+.PHONY: lint format test test-ci
 
 lint:
 	@go vet ./...
-	@gofmt -l -s -w .
 	@golangci-lint run ./...
+format:
+	@gofmt -l -s -w .
+	@goimports -w -l ./
 test:
 	@go test -v ./...
 test-ci:
