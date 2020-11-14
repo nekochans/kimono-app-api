@@ -36,6 +36,7 @@ func NewServer(logger *zap.Logger) *HTTPServer {
 func (s *HTTPServer) Middleware() {
 	s.router.Use(middleware.RequestID)
 	s.router.Use(httputil.Log(s.logger))
+	s.router.Use(httputil.Auth())
 }
 
 func (s *HTTPServer) Router() {
