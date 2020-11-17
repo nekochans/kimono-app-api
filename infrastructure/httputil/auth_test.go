@@ -11,12 +11,14 @@ import (
 )
 
 func TestAuth(t *testing.T) {
-	tests := map[string]struct {
+	tests := []struct {
+		name               string
 		request            func() *http.Request
 		expectedResponse   string
 		expectedStatusCode int
 	}{
-		"OK response when including the Authorization header": {
+		{
+			"OK response when including the Authorization header",
 			func() *http.Request {
 				req, _ := http.NewRequestWithContext(context.TODO(), "GET", "/", nil)
 				req.Header.Add("Authorization", "aaa.aaa.aaa")
@@ -26,7 +28,8 @@ func TestAuth(t *testing.T) {
 			"Hello, HTTPサーバ",
 			http.StatusOK,
 		},
-		"Error response when the Authorization header is not included": {
+		{
+			"Error response when the Authorization header is not included",
 			func() *http.Request {
 				req, _ := http.NewRequestWithContext(context.TODO(), "GET", "/", nil)
 				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
@@ -38,21 +41,24 @@ func TestAuth(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		w := httptest.NewRecorder()
-		r := chi.NewRouter()
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			w := httptest.NewRecorder()
+			r := chi.NewRouter()
 
-		r.Use(Auth())
-		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprint(w, "Hello, HTTPサーバ")
+			r.Use(Auth())
+			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+				fmt.Fprint(w, "Hello, HTTPサーバ")
+			})
+
+			r.ServeHTTP(w, test.request())
+
+			if w.Body.String() != test.expectedResponse {
+				t.Error("response Body was not the expected value")
+			}
+			if w.Code != test.expectedStatusCode {
+				t.Error("status code was not the expected value")
+			}
 		})
-
-		r.ServeHTTP(w, test.request())
-
-		if w.Body.String() != test.expectedResponse {
-			t.Error("response Body was not the expected value")
-		}
-		if w.Code != test.expectedStatusCode {
-			t.Error("status code was not the expected value")
-		}
 	}
 }
