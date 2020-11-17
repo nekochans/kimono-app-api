@@ -11,7 +11,7 @@ func Auth() func(next http.Handler) http.Handler {
 			_, ok := header["Authorization"]
 			if !ok {
 				w.WriteHeader(http.StatusUnauthorized)
-				_, _ = w.Write([]byte("Authorization Error"))
+				_, _ = w.Write([]byte("Unauthorized"))
 				return
 			}
 

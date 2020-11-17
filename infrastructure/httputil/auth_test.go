@@ -32,7 +32,7 @@ func TestAuth(t *testing.T) {
 				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
 				return req
 			},
-			"Authorization Error",
+			"Unauthorized",
 			http.StatusUnauthorized,
 		},
 	}
