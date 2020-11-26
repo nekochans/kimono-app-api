@@ -15,8 +15,11 @@ import (
 )
 
 type HTTPServer struct {
-	logger *zap.Logger
-	router *chi.Mux
+	logger           *zap.Logger
+	router           *chi.Mux
+	region           string
+	userPoolId       string
+	userPoolClientId string
 }
 
 type UserAddress struct {
@@ -26,17 +29,20 @@ type UserAddress struct {
 
 var authenticatedUser string
 
-func NewServer(logger *zap.Logger) *HTTPServer {
+func NewServer(logger *zap.Logger, region, userPoolId, userPoolClientId string) *HTTPServer {
 	return &HTTPServer{
-		router: chi.NewRouter(),
-		logger: logger,
+		router:           chi.NewRouter(),
+		logger:           logger,
+		region:           region,
+		userPoolId:       userPoolId,
+		userPoolClientId: userPoolClientId,
 	}
 }
 
 func (s *HTTPServer) Middleware() {
 	s.router.Use(middleware.RequestID)
 	s.router.Use(httputil.Log(s.logger))
-	s.router.Use(httputil.Auth())
+	s.router.Use(httputil.Auth(s.region, s.userPoolId, s.userPoolClientId))
 }
 
 func (s *HTTPServer) Router() {
@@ -65,7 +71,7 @@ func (s *HTTPServer) Router() {
 		})
 }
 
-func StartHTTPServer() {
+func StartHTTPServer(region, userPoolID, userPoolClientId string) {
 	logOpts := LoggerOptions{}
 	logger, err := NewLoggerFromOptions(logOpts)
 	authenticatedUser = os.Getenv("AUTHENTICATED_USER")
@@ -81,7 +87,7 @@ func StartHTTPServer() {
 		fmt.Fprintf(os.Stderr, "[ERROR] Failed to create logger: %s\n", err)
 		os.Exit(1)
 	}
-	s := NewServer(logger)
+	s := NewServer(logger, region, userPoolID, userPoolClientId)
 	s.Middleware()
 	s.Router()
 	log.Println("Starting app")

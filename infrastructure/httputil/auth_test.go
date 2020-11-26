@@ -20,7 +20,7 @@ func TestAuth(t *testing.T) {
 		{
 			"OK response when including the Authorization header",
 			func() *http.Request {
-				req, _ := http.NewRequestWithContext(context.TODO(), "GET", "/", nil)
+				req, _ := http.NewRequestWithContext(context.TODO(), http.MethodGet, "/", nil)
 				req.Header.Add("Authorization", "aaa.aaa.aaa")
 				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
 				return req
@@ -31,7 +31,7 @@ func TestAuth(t *testing.T) {
 		{
 			"Error response when the Authorization header is not included",
 			func() *http.Request {
-				req, _ := http.NewRequestWithContext(context.TODO(), "GET", "/", nil)
+				req, _ := http.NewRequestWithContext(context.TODO(), http.MethodGet, "/", nil)
 				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
 				return req
 			},
@@ -46,7 +46,8 @@ func TestAuth(t *testing.T) {
 			w := httptest.NewRecorder()
 			r := chi.NewRouter()
 
-			r.Use(Auth())
+			// TODO テスト用のパラメータを渡す
+			r.Use(Auth("", "", ""))
 			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, "Hello, HTTPサーバ")
 			})

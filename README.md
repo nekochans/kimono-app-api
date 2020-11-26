@@ -8,6 +8,16 @@
 
 - Docker
 
+## 環境変数
+
+環境変数を設定する `.env` ファイルを作成します。
+
+```
+REGION=ap-northeast-1
+USER_POOL_ID=your-user-pool-id
+USER_POOL_WEB_CLIENT_ID=yourUserPoolClientId
+```
+
 ## ローカル実行
 
 以下のスクリプトを実行して下さい。
