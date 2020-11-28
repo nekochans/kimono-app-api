@@ -23,6 +23,12 @@ func Auth(region, userPoolId, aud string) func(next http.Handler) http.Handler {
 
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				_, _ = w.Write([]byte("Internal Server Error"))
+				return
+			}
+
 			header := r.Header
 			tokenString, ok := header["Authorization"]
 			if !ok {

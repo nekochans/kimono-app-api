@@ -62,6 +62,7 @@ func TestAuth(t *testing.T) {
 	tests := []struct {
 		name               string
 		request            func() *http.Request
+		userPoolId         string
 		expectedResponse   string
 		expectedStatusCode int
 	}{
@@ -73,6 +74,7 @@ func TestAuth(t *testing.T) {
 				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
 				return req
 			},
+			userPoolId,
 			"Hello, HTTPサーバ",
 			http.StatusOK,
 		},
@@ -83,8 +85,20 @@ func TestAuth(t *testing.T) {
 				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
 				return req
 			},
+			userPoolId,
 			"Unauthorized",
 			http.StatusUnauthorized,
+		},
+		{
+			"Error response when failed to fetch JWK",
+			func() *http.Request {
+				req, _ := http.NewRequestWithContext(context.TODO(), http.MethodGet, "/", nil)
+				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
+				return req
+			},
+			"invalid-user-poop-id",
+			"Internal Server Error",
+			http.StatusInternalServerError,
 		},
 	}
 
@@ -94,11 +108,10 @@ func TestAuth(t *testing.T) {
 			w := httptest.NewRecorder()
 			r := chi.NewRouter()
 
-			r.Use(Auth(region, userPoolId, userPoolClientId))
+			r.Use(Auth(region, test.userPoolId, userPoolClientId))
 			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, "Hello, HTTPサーバ")
 			})
-
 			r.ServeHTTP(w, test.request())
 
 			if w.Body.String() != test.expectedResponse {
