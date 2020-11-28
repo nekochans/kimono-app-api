@@ -31,3 +31,4 @@ tmp
 .air.conf
 
 .env
+.envrc
