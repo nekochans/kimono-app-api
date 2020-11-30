@@ -18,6 +18,14 @@ jobs:
         run: |
           cp .air.normal.conf .air.conf
           docker-compose up --build -d
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          USER_POOL_ID: ${{ secrets.USER_POOL_ID }}
+          USER_POOL_WEB_CLIENT_ID: ${{ secrets.USER_POOL_WEB_CLIENT_ID }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          REGION: ap-northeast-1
       - name: Execute test
         run: |
           docker-compose exec -T api make lint
