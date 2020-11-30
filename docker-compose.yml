@@ -16,3 +16,11 @@ services:
       - apparmor:unconfined
     cap_add:
       - SYS_PTRACE
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - REGION
+      - USER_POOL_ID
+      - USER_POOL_WEB_CLIENT_ID
+      - TEST_EMAIL
+      - TEST_PASSWORD

@@ -29,3 +29,5 @@ tmp
 
 # Air(Live reload for Go apps) Setting Files
 .air.conf
+
+.envrc

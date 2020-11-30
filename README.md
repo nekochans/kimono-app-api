@@ -8,6 +8,20 @@
 
 - Docker
 
+## 環境変数
+
+[direnv/direnv](https://github.com/direnv/direnv) 等を利用するのがオススメです。
+
+```
+export REGION=ap-northeast-1
+export USER_POOL_ID=your-user-pool-id
+export USER_POOL_WEB_CLIENT_ID=yourUserPoolClientId
+export TEST_EMAIL=XXXXX
+export TEST_PASSWORD=XXXXX
+export AWS_ACCESS_KEY_ID=XXXXX
+export AWS_SECRET_ACCESS_KEY=XXXXX
+```
+
 ## ローカル実行
 
 以下のスクリプトを実行して下さい。
