@@ -10,11 +10,10 @@ import (
 
 type CognitoTokenValidator struct {
 	iss    string
-	aud    string
 	keySet *jwk.Set
 }
 
-func Auth(region, userPoolId, aud string) func(next http.Handler) http.Handler {
+func Auth(region, userPoolId string) func(next http.Handler) http.Handler {
 	iss := fmt.Sprintf(
 		"https://cognito-idp.%v.amazonaws.com/%v",
 		region,
@@ -45,7 +44,6 @@ func Auth(region, userPoolId, aud string) func(next http.Handler) http.Handler {
 
 			v := &CognitoTokenValidator{
 				iss:    iss,
-				aud:    aud,
 				keySet: keySet,
 			}
 
@@ -75,8 +73,7 @@ func (v CognitoTokenValidator) validateAccessToken(tokenStr string) (jwt.Token, 
 	err = jwt.Verify(
 		token,
 		jwt.WithIssuer(v.iss),
-		jwt.WithAudience(v.aud),
-		jwt.WithClaimValue("token_use", "id"),
+		jwt.WithClaimValue("token_use", "access"),
 	)
 
 	if err != nil {

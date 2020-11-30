@@ -17,10 +17,5 @@ func main() {
 		panic("error setting env USER_POOL_ID")
 	}
 
-	userPoolClientId := os.Getenv("USER_POOL_WEB_CLIENT_ID")
-	if userPoolId == "" {
-		panic("error setting env USER_POOL_WEB_CLIENT_ID")
-	}
-
-	infrastructure.StartHTTPServer(region, userPoolId, userPoolClientId)
+	infrastructure.StartHTTPServer(region, userPoolId)
 }

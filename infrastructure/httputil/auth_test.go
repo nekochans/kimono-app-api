@@ -16,7 +16,7 @@ import (
 var region string
 var userPoolId string
 var userPoolClientId string
-var idToken *string
+var accessToken *string
 
 func TestMain(m *testing.M) {
 	region = os.Getenv("REGION")
@@ -43,8 +43,7 @@ func TestMain(m *testing.M) {
 		os.Exit(1)
 	}
 
-	idToken = authOutput.AuthenticationResult.IdToken
-	accessToken := authOutput.AuthenticationResult.AccessToken
+	accessToken = authOutput.AuthenticationResult.AccessToken
 
 	status := m.Run()
 
@@ -70,7 +69,7 @@ func TestAuth(t *testing.T) {
 			"OK response when including the Authorization header",
 			func() *http.Request {
 				req, _ := http.NewRequestWithContext(context.TODO(), http.MethodGet, "/", nil)
-				req.Header.Add("Authorization", *idToken)
+				req.Header.Add("Authorization", *accessToken)
 				req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")
 				return req
 			},
@@ -108,7 +107,7 @@ func TestAuth(t *testing.T) {
 			w := httptest.NewRecorder()
 			r := chi.NewRouter()
 
-			r.Use(Auth(region, test.userPoolId, userPoolClientId))
+			r.Use(Auth(region, test.userPoolId))
 			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, "Hello, HTTPサーバ")
 			})
