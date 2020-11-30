@@ -14,13 +14,13 @@ type CognitoAuthHelper struct {
 	UserPoolClientID string
 }
 
-func (c *CognitoAuthHelper) SignUp(email string, password string) (*cognitoidentityprovider.SignUpOutput, error) {
+func (h *CognitoAuthHelper) SignUp(email string, password string) (*cognitoidentityprovider.SignUpOutput, error) {
 	newSession := session.Must(session.NewSession())
 
-	svc := cognitoidentityprovider.New(newSession, aws.NewConfig().WithRegion(c.Region))
+	svc := cognitoidentityprovider.New(newSession, aws.NewConfig().WithRegion(h.Region))
 
 	paramsSignUp := &cognitoidentityprovider.SignUpInput{
-		ClientId: aws.String(c.UserPoolClientID),
+		ClientId: aws.String(h.UserPoolClientID),
 		Password: aws.String(password),
 		UserAttributes: []*cognitoidentityprovider.AttributeType{
 			{
@@ -38,7 +38,7 @@ func (c *CognitoAuthHelper) SignUp(email string, password string) (*cognitoident
 	}
 
 	paramsConfirm := &cognitoidentityprovider.AdminConfirmSignUpInput{
-		UserPoolId: aws.String(c.UserPoolID),
+		UserPoolId: aws.String(h.UserPoolID),
 		Username:   aws.String(email),
 	}
 
@@ -50,10 +50,10 @@ func (c *CognitoAuthHelper) SignUp(email string, password string) (*cognitoident
 	return respSignUp, nil
 }
 
-func (c *CognitoAuthHelper) SignIn(email string, password string) (*cognitoidentityprovider.InitiateAuthOutput, error) {
+func (h *CognitoAuthHelper) SignIn(email string, password string) (*cognitoidentityprovider.InitiateAuthOutput, error) {
 	newSession := session.Must(session.NewSession())
 
-	svc := cognitoidentityprovider.New(newSession, aws.NewConfig().WithRegion(c.Region))
+	svc := cognitoidentityprovider.New(newSession, aws.NewConfig().WithRegion(h.Region))
 
 	params := &cognitoidentityprovider.InitiateAuthInput{
 		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
@@ -61,7 +61,7 @@ func (c *CognitoAuthHelper) SignIn(email string, password string) (*cognitoident
 			"USERNAME": aws.String(email),
 			"PASSWORD": aws.String(password),
 		},
-		ClientId: aws.String(c.UserPoolClientID),
+		ClientId: aws.String(h.UserPoolClientID),
 	}
 
 	resp, err := svc.InitiateAuth(params)
@@ -72,10 +72,10 @@ func (c *CognitoAuthHelper) SignIn(email string, password string) (*cognitoident
 	return resp, nil
 }
 
-func (c *CognitoAuthHelper) DeleteUser(accessToken string) error {
+func (h *CognitoAuthHelper) DeleteUser(accessToken string) error {
 	newSession := session.Must(session.NewSession())
 
-	svc := cognitoidentityprovider.New(newSession, aws.NewConfig().WithRegion(c.Region))
+	svc := cognitoidentityprovider.New(newSession, aws.NewConfig().WithRegion(h.Region))
 
 	paramsDeleteUser := &cognitoidentityprovider.DeleteUserInput{
 		AccessToken: &accessToken,
