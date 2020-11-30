@@ -14,9 +14,9 @@ func Auth(region, userPoolId, aud string) func(next http.Handler) http.Handler {
 		region,
 		userPoolId,
 	)
-	jwkURL := fmt.Sprintf("%v/.well-known/jwks.json", iss)
+	jwkUrl := fmt.Sprintf("%v/.well-known/jwks.json", iss)
 
-	keySet, err := jwk.FetchHTTP(jwkURL)
+	keySet, err := jwk.FetchHTTP(jwkUrl)
 	if err != nil {
 		fmt.Printf("failed to fetch JWK: %s\n", err)
 	}

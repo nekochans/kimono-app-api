@@ -71,7 +71,7 @@ func (s *HTTPServer) Router() {
 		})
 }
 
-func StartHTTPServer(region, userPoolID, userPoolClientId string) {
+func StartHTTPServer(region, userPoolId, userPoolClientId string) {
 	logOpts := LoggerOptions{}
 	logger, err := NewLoggerFromOptions(logOpts)
 	authenticatedUser = os.Getenv("AUTHENTICATED_USER")
@@ -87,7 +87,7 @@ func StartHTTPServer(region, userPoolID, userPoolClientId string) {
 		fmt.Fprintf(os.Stderr, "[ERROR] Failed to create logger: %s\n", err)
 		os.Exit(1)
 	}
-	s := NewServer(logger, region, userPoolID, userPoolClientId)
+	s := NewServer(logger, region, userPoolId, userPoolClientId)
 	s.Middleware()
 	s.Router()
 	log.Println("Starting app")
