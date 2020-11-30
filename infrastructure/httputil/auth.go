@@ -8,6 +8,12 @@ import (
 	"github.com/lestrrat-go/jwx/jwt"
 )
 
+type CognitoTokenValidator struct {
+	iss    string
+	aud    string
+	keySet *jwk.Set
+}
+
 func Auth(region, userPoolId, aud string) func(next http.Handler) http.Handler {
 	iss := fmt.Sprintf(
 		"https://cognito-idp.%v.amazonaws.com/%v",
@@ -37,7 +43,13 @@ func Auth(region, userPoolId, aud string) func(next http.Handler) http.Handler {
 				return
 			}
 
-			_, err := validateToken(tokenString[0], iss, aud, keySet)
+			v := &CognitoTokenValidator{
+				iss:    iss,
+				aud:    aud,
+				keySet: keySet,
+			}
+
+			_, err := v.validateAccessToken(tokenString[0])
 			if err != nil {
 				w.WriteHeader(http.StatusUnauthorized)
 				_, _ = w.Write([]byte("Unauthorized"))
@@ -50,10 +62,10 @@ func Auth(region, userPoolId, aud string) func(next http.Handler) http.Handler {
 	}
 }
 
-func validateToken(tokenStr, iss, aud string, keySet *jwk.Set) (jwt.Token, error) {
+func (v CognitoTokenValidator) validateAccessToken(tokenStr string) (jwt.Token, error) {
 	token, err := jwt.ParseString(
 		tokenStr,
-		jwt.WithKeySet(keySet),
+		jwt.WithKeySet(v.keySet),
 	)
 	if err != nil {
 		fmt.Printf("failed to parse JWT token: %s\n", err)
@@ -62,8 +74,8 @@ func validateToken(tokenStr, iss, aud string, keySet *jwk.Set) (jwt.Token, error
 
 	err = jwt.Verify(
 		token,
-		jwt.WithIssuer(iss),
-		jwt.WithAudience(aud),
+		jwt.WithIssuer(v.iss),
+		jwt.WithAudience(v.aud),
 		jwt.WithClaimValue("token_use", "id"),
 	)
 
